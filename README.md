@@ -6,6 +6,10 @@ This repository will contain all of my [LeetCode](https://leetcode.com) solution
 
 My LeetCode profile is [here](https://leetcode.com/u/devkarim/).
 
+## Technologies Used
+
+- **Programming Language:** Java
+
 ## Author
 
 These LeetCode solutions are made by [@devkarim](https://github.com/devkarim).
