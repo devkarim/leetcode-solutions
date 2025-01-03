@@ -23,18 +23,19 @@ class Solution {
       return nums[0];
     int low = 0;
     int high = nums.length - 1;
-    while (high > low) {
+    while (high >= low) {
       int mid = (low + high) / 2;
-      if ((mid - 1 >= 0 && mid % 2 == 0 && nums[mid - 1] == nums[mid]) ||
-          (mid + 1 < nums.length && mid % 2 == 1 && nums[mid + 1] == nums[mid])) {
-        high = mid - 1;
-      } else if ((mid + 1 < nums.length && mid % 2 == 0 && nums[mid + 1] == nums[mid]) ||
-          (mid - 1 >= 0 && mid % 2 == 1 && nums[mid - 1] == nums[mid])) {
+      if ((mid + 1 == nums.length || nums[mid + 1] != nums[mid]) &&
+          (mid - 1 < 0 || nums[mid - 1] != nums[mid]))
+        return nums[mid];
+
+      int lowSize = nums[mid - 1] == nums[mid] ? mid - 1 : mid;
+      if (lowSize % 2 == 0) {
         low = mid + 1;
       } else {
-        return nums[mid];
+        high = mid - 1;
       }
     }
-    return nums[low];
+    return -1;
   }
 }
