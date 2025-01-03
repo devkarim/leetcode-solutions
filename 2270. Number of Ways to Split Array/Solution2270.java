@@ -20,14 +20,15 @@ class Solution2270 {
 class Solution {
   public int waysToSplitArray(int[] nums) {
     int n = nums.length;
-    long[] prefixSum = new long[nums.length + 1];
-    prefixSum[0] = 0;
+    long sum = 0;
     for (int i = 0; i < n; i++) {
-      prefixSum[i + 1] = prefixSum[i] + nums[i];
+      sum += nums[i];
     }
     int numberOfWays = 0;
+    long count = 0;
     for (int i = 0; i < n - 1; i++) {
-      if (prefixSum[i + 1] >= (prefixSum[n] - prefixSum[i + 1])) {
+      count += nums[i];
+      if (count >= (sum - count)) {
         numberOfWays++;
       }
     }
