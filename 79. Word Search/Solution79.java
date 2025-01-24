@@ -1,6 +1,4 @@
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 class Solution79 {
@@ -21,14 +19,14 @@ class Solution {
       visited = new HashSet<>();
       for (int row = 0; row < board.length; row++) {
           for (int col = 0; col < board[0].length; col++) {
-              boolean exists = backtrack(board, word, row, col, 0, new ArrayList<>());
+              boolean exists = backtrack(board, word, row, col, 0);
               if (exists) return true;
           }
       }
       return false;
   }
 
-  private boolean backtrack(char[][] board, String word, int currentRow, int currentCol, int wordIdx, List<String> path) {
+  private boolean backtrack(char[][] board, String word, int currentRow, int currentCol, int wordIdx) {
       int maxRows = board.length;
       int maxCols = board[0].length;
       // if we reached to the end of the word without errors,
@@ -58,7 +56,7 @@ class Solution {
       for (int[] dir : directions) {
           int newRow = currentRow + dir[0];
           int newCol = currentCol + dir[1];
-          boolean exists = backtrack(board, word, newRow, newCol, wordIdx + 1, path);
+          boolean exists = backtrack(board, word, newRow, newCol, wordIdx + 1);
           if (exists) return true;
       }
       // remove current row and col from visited set
