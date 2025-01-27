@@ -55,7 +55,7 @@ class Solution {
     StringBuilder str = new StringBuilder();
     for (int i = 0; i < s.length(); i++) {
       str.append(s.charAt(i));
-      // append dot at specified location
+      // append dot at specified location except the ending
       if (subset.contains(i) && i != s.length() - 1) {
         str.append(".");
       }
