@@ -19,7 +19,8 @@ class Solution {
     res = new ArrayList<>();
     // check if string length is more than 12 (3 * 4)
     // as there is no valid ip address beyond that length
-    if (s.length() > 12) return res;
+    if (s.length() > 12)
+      return res;
     subset = new HashSet<>();
     backtrack(s, 0, 0);
     return res;
@@ -33,7 +34,7 @@ class Solution {
       }
       return;
     }
-    for (int end = start; end < start + 3 && end < s.length(); end++) {
+    for (int end = start; end < Math.min(start + 3, s.length()); end++) {
       String sub = s.substring(start, end + 1);
       if (isValidNumber(sub)) {
         subset.add(end);
