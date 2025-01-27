@@ -17,6 +17,9 @@ class Solution {
 
   public List<String> restoreIpAddresses(String s) {
     res = new ArrayList<>();
+    // check if string length is more than 12 (3 * 4)
+    // as there is no valid ip address beyond that length
+    if (s.length() > 12) return res;
     subset = new HashSet<>();
     backtrack(s, 0, 0);
     return res;
