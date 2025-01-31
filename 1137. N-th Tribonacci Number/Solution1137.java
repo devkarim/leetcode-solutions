@@ -8,15 +8,18 @@ class Solution1137 {
 
 class Solution {
   public int tribonacci(int n) {
-    int[] cache = new int[n + 1];
-    return dp(n, cache);
-  }
-
-  private int dp(int n, int[] cache) {
-    if (n <= 1) return n;
-    if (n == 2) return 1;
-    if (cache[n] != 0) return cache[n];
-    cache[n] = dp(n - 1, cache) + dp(n - 2, cache) + dp(n - 3, cache);
-    return cache[n];
+    int[] dp = new int[3];
+    if (n == 0) return 0;
+    if (n <= 2) return 1;
+    dp[0] = 0;
+    dp[1] = 1;
+    dp[2] = 1;
+    for (int i = 3; i <= n; i++) {
+      int temp2 = dp[2];
+      dp[2] = dp[0] + dp[1] + dp[2];
+      dp[0] = dp[1];
+      dp[1] = temp2;
+    }
+    return dp[2];
   }
 }
