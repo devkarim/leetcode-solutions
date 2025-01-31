@@ -13,26 +13,25 @@ class Solution1980 {
 
 class Solution {
   private Set<String> numSet;
-  private StringBuilder str;
+  private final char[] chars = new char[]{'0', '1'};
 
   public String findDifferentBinaryString(String[] nums) {
-    str = new StringBuilder();
     numSet = new HashSet<>();
     numSet.addAll(Arrays.asList(nums));
-    backtrack(nums.length);
-    return str.toString();
+    return backtrack(nums.length, new StringBuilder());
   }
 
-  private boolean backtrack(int n) {
-    if (n == 0) return !numSet.contains(str.toString());
-    str.append('0');
-    boolean found = backtrack(n - 1);
-    if (found) return true;
-    str.deleteCharAt(str.length() - 1);
-    str.append('1');
-    found = backtrack(n - 1);
-    if (found) return true;
-    str.deleteCharAt(str.length() - 1);
-    return false;
+  private String backtrack(int n, StringBuilder str) {
+    if (str.length() == n) {
+      if (!numSet.contains(str.toString())) return str.toString();
+      return ""; 
+    }
+    for (char c : chars) {
+      str.append(c);
+      String res = backtrack(n, str);
+      if (res.length() != 0) return res;
+      str.deleteCharAt(str.length() - 1);
+    }
+    return "";
   }
 }
