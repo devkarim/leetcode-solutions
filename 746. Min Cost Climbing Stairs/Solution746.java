@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 class Solution746 {
   public static void main(String[] args) {
     Solution sol = new Solution();
@@ -10,7 +12,7 @@ class Solution746 {
 class Solution {
   public int minCostClimbingStairs(int[] cost) {
     int[] cache = new int[cost.length];
-    initCache(cache);
+    Arrays.fill(cache, -1);
     return Math.min(dp(cost, 0, cache), dp(cost, 1, cache));
   }
 
@@ -19,11 +21,5 @@ class Solution {
     if (cache[n] != -1) return cache[n];
     cache[n] = cost[n] + Math.min(dp(cost, n + 1, cache), dp(cost, n + 2, cache));
     return cache[n];
-  }
-
-  private void initCache(int[] cache) {
-    for (int i = 0; i < cache.length; i++) {
-      cache[i] = -1;
-    }
   }
 }
