@@ -1,25 +1,23 @@
-import java.util.Arrays;
-
 class Solution746 {
   public static void main(String[] args) {
     Solution sol = new Solution();
-    // int[] cost = new int[]{1,100,1,1,1,100,1,1,100,1};
-    int[] cost = new int[]{10, 15, 20};
+    int[] cost = new int[]{1,100,1,1,1,100,1,1,100,1};
+    // int[] cost = new int[]{10, 15, 20};
     System.out.println(sol.minCostClimbingStairs(cost));
   }
 }
 
 class Solution {
   public int minCostClimbingStairs(int[] cost) {
-    int[] cache = new int[cost.length];
-    Arrays.fill(cache, -1);
-    return Math.min(dp(cost, 0, cache), dp(cost, 1, cache));
-  }
+    int n = cost.length;
+    int[] dp = new int[2];
 
-  private int dp(int[] cost, int n, int[] cache) {
-    if (n >= cost.length) return 0; 
-    if (cache[n] != -1) return cache[n];
-    cache[n] = cost[n] + Math.min(dp(cost, n + 1, cache), dp(cost, n + 2, cache));
-    return cache[n];
+    for (int i = 2; i <= n; i++) {
+      int tmp = dp[1];
+      dp[1] = Math.min(dp[1] + cost[i - 1], dp[0] + cost[i - 2]);
+      dp[0] = tmp;
+    }
+
+    return dp[1];
   }
 }
