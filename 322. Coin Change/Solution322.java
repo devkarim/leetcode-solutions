@@ -9,12 +9,11 @@ class Solution322 {
     int[] coins = {2,5,10,1};
     int amount = 27;
     System.out.println(sol.coinChange(coins, amount));
-    System.out.println(sol.cache);
   }
 }
 
 class Solution {
-  public Map<Integer, Integer> cache;
+  private Map<Integer, Integer> cache;
 
   public int coinChange(int[] coins, int amount) {
     if (amount == 0) return 0;
