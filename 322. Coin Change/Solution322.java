@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,28 +14,18 @@ class Solution322 {
 }
 
 class Solution {
-  private Map<Integer, Integer> cache;
-
   public int coinChange(int[] coins, int amount) {
     if (amount == 0) return 0;
-    cache = new HashMap<>();
-    int minCoins = dfs(coins, amount);
-    return Integer.MAX_VALUE == minCoins ? -1 : minCoins;
-  }
-
-  public int dfs(int[] coins, int amount) {
-    if (amount == 0) return 0;
-    if (cache.containsKey(amount)) return cache.get(amount);
-    int min = Integer.MAX_VALUE;
-    for (int coin : coins) {
-      if (amount - coin >= 0) {
-        int minCoins = dfs(coins, amount - coin);
-        if (minCoins != Integer.MAX_VALUE) {
-          min = Math.min(min, minCoins + 1);
+    int[] dp = new int[amount + 1];
+    Arrays.fill(dp, amount + 1);
+    dp[0] = 0;
+    for (int i = 1; i <= amount; i++) {
+      for (int j = 0; j < coins.length; j++) {
+        if (coins[j] <= i) {
+          dp[i] = Math.min(dp[i], dp[i - coins[j]] + 1);
         }
       }
     }
-    cache.put(amount, min);
-    return min;
+    return dp[amount] > amount ? -1 : dp[amount];
   }
 }
