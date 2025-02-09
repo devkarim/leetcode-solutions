@@ -8,12 +8,18 @@ class Solution441 {
 
 class Solution {
   public int arrangeCoins(int n) {
-    int max = n;
-    for (int i = 1; i <= max; i++) {
-      n -= i;
-      if (n == 0) return i;
-      if (n < 0) return i - 1;
+    int l = 1;
+    int r = n;
+    while (l <= r) {
+      int mid = l + (r - l) / 2;
+      long coins = (long) mid * (mid + 1) / 2;
+      if (coins == n) return mid;
+      if (coins > n) {
+        r = mid - 1;
+      } else {
+        l = mid + 1;
+      }
     }
-    return -1;
+    return r;
   }
 }
