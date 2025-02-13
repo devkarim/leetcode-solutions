@@ -29,13 +29,8 @@ class Solution {
     }
     if (target < 0) return false;
     if (cache[idx][target] != null) return cache[idx][target];
-    // include curr element in second subset
-    boolean currInSubset2 = dfs(nums, idx + 1, target);
-    // include curr element in first subset
-    boolean currInSubset1 = dfs(nums, idx + 1, target - nums[idx]);
-    boolean res = currInSubset1 || currInSubset2;
-    cache[idx][target] = res;
-    return res;
+    cache[idx][target] = dfs(nums, idx + 1, target) || dfs(nums, idx + 1, target - nums[idx]);
+    return cache[idx][target];
   }
 }
 
