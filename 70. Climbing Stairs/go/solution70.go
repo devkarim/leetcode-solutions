@@ -42,26 +42,28 @@ Recurrence relation:
 f(n) = f(n-1) + f(n-2)
 */
 
-var cache = make(map[int]int)
-
 func climbStairs(n int) int {
-	return dfs(n)
+	dp := make([]int, n)
+
+	dfs := func(n int) int {
+		// if n is either 0 or 1, total number of ways to climb is 1
+		if n <= 1 {
+			return 1
+		}
+		// if n is 2, total number of ways to climb is 2 (1+1 or 2)
+		if n == 2 {
+			return 2
+		}
+		res := dp[n-1] + dp[n-2]
+		return res
+	}
+
+	for i := 0; i < n; i++ {
+		dp[i] = dfs(i)
+	}
+
+	return dp[n-1]
 }
 
-func dfs(n int) int {
-	// if n is either 0 or 1, total number of ways to climb is 1
-	if n <= 1 {
-		return 1
-	}
-	// if n is 2, total number of ways to climb is 2 (1+1 or 2)
-	if n == 2 {
-		return 2
-	}
-	// is the result for n existing in cache?
-	if val, ok := cache[n]; ok {
-		return val
-	}
-	res := dfs(n-1) + dfs(n-2)
-	cache[n] = res
-	return cache[n]
-}
+// 0 1 2 3 4
+// 1 1 2 3 5
