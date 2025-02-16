@@ -43,26 +43,15 @@ f(n) = f(n-1) + f(n-2)
 */
 
 func climbStairs(n int) int {
-	dp := make([]int, n)
+	dp := make([]int, n+2)
+	dp[0] = 1
+	dp[1] = 1
 
-	dfs := func(n int) int {
-		// if n is either 0 or 1, total number of ways to climb is 1
-		if n <= 1 {
-			return 1
-		}
-		// if n is 2, total number of ways to climb is 2 (1+1 or 2)
-		if n == 2 {
-			return 2
-		}
-		res := dp[n-1] + dp[n-2]
-		return res
+	for i := 2; i <= n; i++ {
+		dp[i] = dp[i-1] + dp[i-2]
 	}
 
-	for i := 0; i < n; i++ {
-		dp[i] = dfs(i)
-	}
-
-	return dp[n-1]
+	return dp[n]
 }
 
 // 0 1 2 3 4
