@@ -6,6 +6,7 @@ import (
 
 func main() {
 	cost := []int{1, 100, 1, 1, 1, 100, 1, 1, 100, 1}
+	// cost := []int{10, 15, 20}
 	fmt.Println(minCostClimbingStairs(cost))
 }
 
@@ -72,33 +73,26 @@ Base Cases:
 -> F(len(costs)) = 0
 */
 
-var cache []int
-
 func minCostClimbingStairs(cost []int) int {
-	cache = make([]int, len(cost))
-	for i := range cache {
-		cache[i] = -1
+	dp := make([]int, len(cost)+2)
+	dfs := func(cost []int, idx int) int {
+		if idx >= len(cost) {
+			return 0
+		}
+		// include first cost
+		res := cost[idx] + dp[idx+1]
+		// include second cost
+		second := 0
+		if idx+1 < len(cost) {
+			second = cost[idx+1]
+		}
+		res = min(res, second+dp[idx+2])
+		return res
 	}
-	return dfs(cost, 0)
-}
-
-func dfs(cost []int, idx int) int {
-	if idx >= len(cost) {
-		return 0
+	for i := len(cost) - 1; i >= 0; i-- {
+		dp[i] = dfs(cost, i)
 	}
-	if cache[idx] != -1 {
-		return cache[idx]
-	}
-	// include first cost
-	res := cost[idx] + dfs(cost, idx+1)
-	// include second cost
-	second := 0
-	if idx+1 < len(cost) {
-		second = cost[idx+1]
-	}
-	res = min(res, second+dfs(cost, idx+2))
-	cache[idx] = res
-	return res
+	return dp[0]
 }
 
 func min(a, b int) int {
