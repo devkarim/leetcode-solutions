@@ -75,22 +75,13 @@ Base Cases:
 
 func minCostClimbingStairs(cost []int) int {
 	dp := make([]int, len(cost)+2)
-	dfs := func(cost []int, idx int) int {
-		if idx >= len(cost) {
-			return 0
-		}
-		// include first cost
-		res := cost[idx] + dp[idx+1]
-		// include second cost
-		second := 0
-		if idx+1 < len(cost) {
-			second = cost[idx+1]
-		}
-		res = min(res, second+dp[idx+2])
-		return res
-	}
 	for i := len(cost) - 1; i >= 0; i-- {
-		dp[i] = dfs(cost, i)
+		res := cost[i] + dp[i+1]
+		second := 0
+		if i+1 < len(cost) {
+			second = cost[i+1]
+		}
+		dp[i] = min(res, second+dp[i+2])
 	}
 	return dp[0]
 }
