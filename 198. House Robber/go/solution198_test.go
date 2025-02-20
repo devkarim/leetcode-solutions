@@ -23,6 +23,16 @@ func TestSolution198(t *testing.T) {
 			nums: []int{2, 1, 1, 2},
 			want: 4,
 		},
+		{
+			name: "Test Case #4",
+			nums: []int{1, 2},
+			want: 2,
+		},
+		{
+			name: "Test Case #5",
+			nums: []int{2},
+			want: 2,
+		},
 	}
 
 	for _, tt := range tests {
