@@ -64,26 +64,20 @@ Recurrence Relation:
 Base Cases:
 -> F(N) = 0 at: N >= len(nums)
 */
-var cache []int
-
 func rob(nums []int) int {
-	cache = make([]int, len(nums))
-	for i := range cache {
-		cache[i] = -1
+	dp := make([]int, len(nums)+3)
+	dfs := func(idx int) int {
+		if idx >= len(nums) {
+			return 0
+		}
+		res := nums[idx] + max(dp[idx+2], dp[idx+3])
+		return res
 	}
-	return max(dfs(nums, 0), dfs(nums, 1))
-}
-
-func dfs(nums []int, idx int) int {
-	if idx >= len(nums) {
-		return 0
+	for i := len(nums) - 1; i >= 0; i-- {
+		dp[i] = dfs(i)
 	}
-	if cache[idx] != -1 {
-		return cache[idx]
-	}
-	res := nums[idx] + max(dfs(nums, idx+2), dfs(nums, idx+3))
-	cache[idx] = res
-	return res
+	return max(dp[0], dp[1])
+	// return max(dfs(nums, 0), dfs(nums, 1))
 }
 
 func max(a, b int) int {
