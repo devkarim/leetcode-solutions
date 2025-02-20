@@ -49,8 +49,6 @@ adjacent elements.
 -- Move to second last house (index = 2)
 
 Conclusion:
--> If my choice was to take current house money, move to current + 2 house
--> If my choice was not to take current house money, move to current + 1 house
 
 Generalizing:
 Assuming we start at house: i
@@ -65,26 +63,21 @@ Recurrence Relation:
 Base Cases:
 -> F(0) = 0
 */
-var cache []int
-
 func rob(nums []int) int {
-	cache = make([]int, len(nums))
-	for i := range cache {
-		cache[i] = -1
+	if len(nums) == 1 {
+		return nums[0]
 	}
-	return dfs(nums, len(nums)-1)
-}
 
-func dfs(nums []int, idx int) int {
-	if idx < 0 {
-		return 0
+	dp := make([]int, len(nums))
+
+	dp[0] = nums[0]
+	dp[1] = max(nums[1], nums[0])
+
+	for i := 2; i < len(nums); i++ {
+		dp[i] = max(nums[i]+dp[i-2], dp[i-1])
 	}
-	if cache[idx] != -1 {
-		return cache[idx]
-	}
-	res := max(nums[idx]+dfs(nums, idx-2), dfs(nums, idx-1))
-	cache[idx] = res
-	return res
+
+	return dp[len(nums)-1]
 }
 
 func max(a, b int) int {
