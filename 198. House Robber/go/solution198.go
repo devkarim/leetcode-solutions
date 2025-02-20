@@ -65,13 +65,15 @@ Base Cases:
 -> F(N) = 0 at: N >= len(nums)
 */
 func rob(nums []int) int {
-	dp := make([]int, len(nums)+3)
+	dp_2 := 0
+	dp_3 := 0
+	dp_0 := 0
+	dp_1 := 0
 	for i := len(nums) - 1; i >= 0; i-- {
-		res := nums[i] + max(dp[i+2], dp[i+3])
-		dp[i] = res
+		dp_3, dp_2 = dp_2, dp_1
+		dp_1, dp_0 = dp_0, nums[i]+max(dp_2, dp_3)
 	}
-	return max(dp[0], dp[1])
-	// return max(dfs(nums, 0), dfs(nums, 1))
+	return max(dp_0, dp_1)
 }
 
 func max(a, b int) int {
