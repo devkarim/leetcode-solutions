@@ -39,7 +39,7 @@ func TestSolution198(t *testing.T) {
 		actual := rob(tt.nums)
 
 		if actual != tt.want {
-			t.Errorf("got %q; expected %q", actual, tt.want)
+			t.Errorf("got %v; expected %v", actual, tt.want)
 		}
 	}
 }
