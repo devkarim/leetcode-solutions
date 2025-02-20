@@ -66,15 +66,9 @@ Base Cases:
 */
 func rob(nums []int) int {
 	dp := make([]int, len(nums)+3)
-	dfs := func(idx int) int {
-		if idx >= len(nums) {
-			return 0
-		}
-		res := nums[idx] + max(dp[idx+2], dp[idx+3])
-		return res
-	}
 	for i := len(nums) - 1; i >= 0; i-- {
-		dp[i] = dfs(i)
+		res := nums[i] + max(dp[i+2], dp[i+3])
+		dp[i] = res
 	}
 	return max(dp[0], dp[1])
 	// return max(dfs(nums, 0), dfs(nums, 1))
