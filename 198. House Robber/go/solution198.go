@@ -68,16 +68,14 @@ func rob(nums []int) int {
 		return nums[0]
 	}
 
-	dp := make([]int, len(nums))
-
-	dp[0] = nums[0]
-	dp[1] = max(nums[1], nums[0])
+	beforeBefore := nums[0]
+	before := max(nums[1], nums[0])
 
 	for i := 2; i < len(nums); i++ {
-		dp[i] = max(nums[i]+dp[i-2], dp[i-1])
+		beforeBefore, before = before, max(nums[i]+beforeBefore, before)
 	}
 
-	return dp[len(nums)-1]
+	return before
 }
 
 func max(a, b int) int {
