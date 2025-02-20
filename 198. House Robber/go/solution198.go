@@ -16,7 +16,7 @@ Constraints:
 - 1 <= nums.length <= 100 -> small
 - 0 <= nums[i] <= 400 -> small
 - Cannot take adjacent values in houses array
-- Forced to start at either first house or second house
+- Forced to start at either first house or second house or last house
 
 Observations:
 # Each house has a certain amount of money stashed, the only constraint
@@ -37,43 +37,54 @@ return the maximum amount of money you can rob tonight without alerting the poli
 - Robbing means making a choice to take ith house money i.e. ith array element.
 
 Example Walkthrough:
-Given [2,1,1,2], find max of either starting at 1st element or 2nd array element with
-ignoring adjacent elements.
+Given [2,1,1,2], find max of either starting at the last element with ignoring
+adjacent elements.
 
 -> What are my actions?
-- Take 1st house
--- Take 3rd house
--- OR
--- Take 4th house
+- Rob last house (index = 3)
+-- Take last house money = 2
+-- Move to third last house (index = 1)
 - OR
-- Take 2nd house
--- Take 4th house
+- Donot rob last house (index = 3)
+-- Move to second last house (index = 2)
 
 Conclusion:
--> If we start at 1st house, either take 3rd or 4th.
--> If we start at 2nd house, either take 4th or 5th.
+-> If my choice was to take current house money, move to current + 2 house
+-> If my choice was not to take current house money, move to current + 1 house
 
 Generalizing:
 Assuming we start at house: i
 -> Take house money of: i
--> Get max of (i + 2) and (i + 3)
+--> Move to i - 2
+-> Donot take house money of: i
+--> Move to i - 1
 
 Recurrence Relation:
--> F(N) = nums[N] + Max(F(N+2), F(N+3)) <-
+-> F(N) = Max(nums[N]+F(N-2), F(N-1)) <-
 
 Base Cases:
--> F(N) = 0 at: N >= len(nums)
+-> F(0) = 0
 */
+var cache []int
+
 func rob(nums []int) int {
-	dp_2 := 0
-	dp_3 := 0
-	dp_0 := 0
-	dp_1 := 0
-	for i := len(nums) - 1; i >= 0; i-- {
-		dp_3, dp_2 = dp_2, dp_1
-		dp_1, dp_0 = dp_0, nums[i]+max(dp_2, dp_3)
+	cache = make([]int, len(nums))
+	for i := range cache {
+		cache[i] = -1
 	}
-	return max(dp_0, dp_1)
+	return dfs(nums, len(nums)-1)
+}
+
+func dfs(nums []int, idx int) int {
+	if idx < 0 {
+		return 0
+	}
+	if cache[idx] != -1 {
+		return cache[idx]
+	}
+	res := max(nums[idx]+dfs(nums, idx-2), dfs(nums, idx-1))
+	cache[idx] = res
+	return res
 }
 
 func max(a, b int) int {
