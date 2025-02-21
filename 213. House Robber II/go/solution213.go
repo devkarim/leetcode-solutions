@@ -12,15 +12,12 @@ func rob(nums []int) int {
 	if n == 1 {
 		return nums[0]
 	}
-	if n == 2 {
-		return max(nums[0], nums[1])
-	}
 
 	robRange := func(start, end int) int {
-		beforeBefore := nums[start]
-		before := max(beforeBefore, nums[start+1])
+		beforeBefore := 0
+		before := nums[start]
 
-		for i := start + 2; i < end; i++ {
+		for i := start + 1; i < end; i++ {
 			beforeBefore, before = before, max(nums[i]+beforeBefore, before)
 		}
 
