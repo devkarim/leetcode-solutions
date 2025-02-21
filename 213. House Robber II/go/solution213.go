@@ -7,37 +7,29 @@ func main() {
 	fmt.Println(rob(nums))
 }
 
-var cache []int
-
 func rob(nums []int) int {
 	n := len(nums)
 	if n == 1 {
 		return nums[0]
 	}
-	cache = make([]int, n)
-	fill(cache, -1)
-	res := dfs(nums, n-2, 0)
-	fill(cache, -1)
-	res = max(res, dfs(nums, n-1, 1))
-	return res
-}
+	if n == 2 {
+		return max(nums[0], nums[1])
+	}
 
-func dfs(nums []int, idx int, last int) int {
-	if idx < last {
-		return 0
-	}
-	if cache[idx] != -1 {
-		return cache[idx]
-	}
-	res := max(nums[idx]+dfs(nums, idx-2, last), dfs(nums, idx-1, last))
-	cache[idx] = res
-	return res
-}
+	robRange := func(start, end int) int {
+		dp := make([]int, end)
 
-func fill(arr []int, val int) {
-	for i := range arr {
-		arr[i] = val
+		dp[start] = nums[start]
+		dp[start+1] = max(dp[start], nums[start+1])
+
+		for i := start + 2; i < end; i++ {
+			dp[i] = max(nums[i]+dp[i-2], dp[i-1])
+		}
+
+		return dp[end-1]
 	}
+
+	return max(robRange(0, n-1), robRange(1, n))
 }
 
 func max(a, b int) int {
