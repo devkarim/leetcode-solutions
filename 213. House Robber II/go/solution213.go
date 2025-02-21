@@ -17,16 +17,14 @@ func rob(nums []int) int {
 	}
 
 	robRange := func(start, end int) int {
-		dp := make([]int, end)
-
-		dp[start] = nums[start]
-		dp[start+1] = max(dp[start], nums[start+1])
+		beforeBefore := nums[start]
+		before := max(beforeBefore, nums[start+1])
 
 		for i := start + 2; i < end; i++ {
-			dp[i] = max(nums[i]+dp[i-2], dp[i-1])
+			beforeBefore, before = before, max(nums[i]+beforeBefore, before)
 		}
 
-		return dp[end-1]
+		return before
 	}
 
 	return max(robRange(0, n-1), robRange(1, n))
