@@ -69,24 +69,19 @@ Base Cases:
 func deleteAndEarn(nums []int) int {
 	cnt := make(map[int]int)
 
-	for _, n := range nums {
-		cnt[n]++
+	for _, k := range nums {
+		cnt[k]++
 	}
 
 	uniqueNums := slices.Collect(maps.Keys(cnt))
 	sort.Ints(uniqueNums)
 	n := len(uniqueNums)
 
-	cache := make([]int, n)
+	dp := make([]int, n+2)
 
-	var dfs func(idx int) int
-
-	dfs = func(idx int) int {
+	dfs := func(idx, bias int) int {
 		if idx < 0 {
 			return 0
-		}
-		if cache[idx] != 0 {
-			return cache[idx]
 		}
 
 		k := uniqueNums[idx]
@@ -94,17 +89,21 @@ func deleteAndEarn(nums []int) int {
 		val := k * count
 		res := 0
 
-		// if next item is k+1
 		if idx-1 >= 0 && uniqueNums[idx-1] == k-1 {
-			res = max(val+dfs(idx-2), dfs(idx-1))
+			res = max(val+dp[idx-2+bias], dp[idx-1+bias])
 		} else {
-			res = max(val+dfs(idx-1), dfs(idx-1))
+			res = max(val+dp[idx-1+bias], dp[idx-1+bias])
 		}
-
-		cache[idx] = res
 
 		return res
 	}
 
-	return dfs(n - 1)
+	dp[0] = 0
+	dp[1] = 0
+
+	for i := 0; i < n; i++ {
+		dp[i+2] = dfs(i, 2)
+	}
+
+	return dp[n+1]
 }

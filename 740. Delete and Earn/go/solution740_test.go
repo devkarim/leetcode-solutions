@@ -34,6 +34,11 @@ func Test_deleteAndEarn(t *testing.T) {
 			nums: []int{2, 2, 2, 3, 3, 5, 6, 7, 9},
 			want: 27,
 		},
+		{
+			name: "Test Case #6",
+			nums: []int{1, 1, 1, 1},
+			want: 4,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
