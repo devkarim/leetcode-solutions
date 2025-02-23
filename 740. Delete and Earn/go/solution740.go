@@ -79,30 +79,25 @@ func deleteAndEarn(nums []int) int {
 
 	dp := make([]int, n+2)
 
-	dfs := func(idx, bias int) int {
-		if idx < 0 {
-			return 0
-		}
-
-		k := uniqueNums[idx]
-		count := cnt[k]
-		val := k * count
-		res := 0
-
-		if idx-1 >= 0 && uniqueNums[idx-1] == k-1 {
-			res = max(val+dp[idx-2+bias], dp[idx-1+bias])
-		} else {
-			res = max(val+dp[idx-1+bias], dp[idx-1+bias])
-		}
-
-		return res
-	}
-
 	dp[0] = 0
 	dp[1] = 0
 
+	bias := 2
+
 	for i := 0; i < n; i++ {
-		dp[i+2] = dfs(i, 2)
+		k := uniqueNums[i]
+		count := cnt[k]
+		res := k * count
+
+		if i-1 >= 0 && uniqueNums[i-1] == k-1 {
+			res += dp[i-2+bias]
+		} else {
+			res += dp[i-1+bias]
+		}
+
+		res = max(res, dp[i-1+bias])
+
+		dp[i+bias] = res
 	}
 
 	return dp[n+1]
