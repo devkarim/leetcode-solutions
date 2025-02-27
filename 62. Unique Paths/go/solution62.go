@@ -74,39 +74,28 @@ Assuming a grid of size (m,n)
 --> F(i,y)=0 => Moved to bottom and out of bounds
 */
 func uniquePaths(m, n int) int {
-	cache := make([][]int, m)
+	dp := make([][]int, m+2)
 
-	// initialize cache with n rows
-	// and fill cache with -1
-	for i := range cache {
-		cache[i] = make([]int, n)
-		for j := range cache[i] {
-			cache[i][j] = -1
-		}
+	for i := range dp {
+		dp[i] = make([]int, n+2)
 	}
 
-	var dfs func(int, int) int
-
-	dfs = func(i, j int) int {
-		// if out of bounds
-		if i >= m || j >= n {
-			return 0
-		}
+	dfs := func(i, j int) int {
 		// if reached destination
 		if i == m-1 && j == n-1 {
 			return 1
 		}
-		// if in cache
-		if cache[i][j] != -1 {
-			return cache[i][j]
-		}
 		// if neither out of bounds or reached destination
 		// move either right or bottom
-		res := dfs(i+1, j) + dfs(i, j+1)
-		// store result in cache for future use
-		cache[i][j] = res
+		res := dp[i+1][j] + dp[i][j+1]
 		return res
 	}
 
-	return dfs(0, 0)
+	for i := m - 1; i >= 0; i-- {
+		for j := n - 1; j >= 0; j-- {
+			dp[i][j] = dfs(i, j)
+		}
+	}
+
+	return dp[0][0]
 }
