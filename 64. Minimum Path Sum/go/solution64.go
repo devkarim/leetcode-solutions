@@ -72,37 +72,22 @@ Assuming a grid of size (m,n)
 --> F(i,y)=Infinity => Moved to bottom and out of bounds
 */
 func minPathSum(grid [][]int) int {
-	m := len(grid)
-	n := len(grid[0])
+	m := len(grid)    // number of rows
+	n := len(grid[0]) // number of cols
 
-	cache := make([][]int, m)
-	for i := range cache {
-		cache[i] = make([]int, n)
-		for j := range cache[i] {
-			cache[i][j] = -1
+	dp := make([]int, n+1)
+
+	for i := range dp {
+		dp[i] = MaxInt
+	}
+
+	dp[n-1] = 0
+
+	for i := m - 1; i >= 0; i-- {
+		for j := n - 1; j >= 0; j-- {
+			dp[j] = grid[i][j] + min(dp[j], dp[j+1])
 		}
 	}
 
-	var dfs func(i, j int) int
-
-	dfs = func(i, j int) int {
-		// if out of bounds
-		if i >= m || j >= n {
-			return MaxInt
-		}
-		// if at destination
-		if i == m-1 && j == n-1 {
-			return grid[i][j]
-		}
-		// if in cache
-		if cache[i][j] != -1 {
-			return cache[i][j]
-		}
-		// move either right or left
-		res := grid[i][j] + min(dfs(i+1, j), dfs(i, j+1))
-		cache[i][j] = res
-		return res
-	}
-
-	return dfs(0, 0)
+	return dp[0]
 }
