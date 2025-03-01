@@ -20,20 +20,15 @@ func uniquePathsWithObstacles(obstacleGrid [][]int) int {
 		dp[i] = make([]int, n+1)
 	}
 
-	dfs := func(i, j int) int {
-		if i >= m || j >= n || obstacleGrid[i][j] == 1 {
-			return 0
-		}
-		if i == m-1 && j == n-1 {
-			return 1
-		}
-		res := dp[i+1][j] + dp[i][j+1]
-		return res
-	}
-
 	for i := m - 1; i >= 0; i-- {
 		for j := n - 1; j >= 0; j-- {
-			dp[i][j] = dfs(i, j)
+			if obstacleGrid[i][j] == 1 {
+				dp[i][j] = 0
+			} else if i == m-1 && j == n-1 {
+				dp[i][j] = 1
+			} else {
+				dp[i][j] = dp[i+1][j] + dp[i][j+1]
+			}
 		}
 	}
 
