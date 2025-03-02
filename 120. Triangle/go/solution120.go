@@ -12,24 +12,24 @@ func main() {
 	fmt.Println(minimumTotal(triangle))
 }
 
+const (
+	MaxUint = ^uint(0)
+	MinUint = 0
+	MaxInt  = int(MaxUint >> 1)
+)
+
 func minimumTotal(triangle [][]int) int {
 	m := len(triangle)
 	n := len(triangle[m-1])
 
-	dp := make([][]int, m+1)
-	for i := range dp {
-		dp[i] = make([]int, n+1)
-	}
+	dp := make([]int, n)
+	copy(dp, triangle[m-1])
 
-	dfs := func(i, j int) int {
-		return triangle[i][j] + min(dp[i+1][j+1], dp[i+1][j])
-	}
-
-	for i := m - 1; i >= 0; i-- {
-		for j := len(triangle[i]) - 1; j >= 0; j-- {
-			dp[i][j] = dfs(i, j)
+	for i := m - 2; i >= 0; i-- {
+		for j := 0; j < len(triangle[i]); j++ {
+			dp[j] = triangle[i][j] + min(dp[j+1], dp[j])
 		}
 	}
 
-	return dp[0][0]
+	return dp[0]
 }
