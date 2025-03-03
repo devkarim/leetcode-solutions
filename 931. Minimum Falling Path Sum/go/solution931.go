@@ -4,9 +4,8 @@ import "fmt"
 
 func main() {
 	matrix := [][]int{
-		{2, 1, 3},
-		{6, 5, 4},
-		{7, 8, 9},
+		{17, 82},
+		{1, -44},
 	}
 	fmt.Println(minFallingPathSum(matrix))
 }
@@ -19,35 +18,28 @@ const (
 
 func minFallingPathSum(matrix [][]int) int {
 	n := len(matrix)
-
-	cache := make([][]int, n)
-	for i := range cache {
-		cache[i] = make([]int, n)
-		for j := range cache[i] {
-			cache[i][j] = MinInt
-		}
+	if n == 1 {
+		return matrix[0][0]
 	}
 
-	var dfs func(i, j int) int
-
-	dfs = func(i, j int) int {
-		if i == n {
-			return 0
-		}
-		if j >= n || j < 0 {
-			return MaxInt
-		}
-		if cache[i][j] != MinInt {
-			return cache[i][j]
-		}
-		res := matrix[i][j] + min(dfs(i+1, j-1), min(dfs(i+1, j), dfs(i+1, j+1)))
-		cache[i][j] = res
-		return res
-	}
-
+	dp := make([]int, n)
+	copy(dp, matrix[n-1][:])
 	res := MaxInt
-	for i := 0; i < n; i++ {
-		res = min(res, dfs(0, i))
+
+	for i := n - 2; i >= 0; i-- {
+		left := MaxInt
+		for j := 0; j < n; j++ {
+			mid := dp[j]
+			right := MaxInt
+			if j+1 < n {
+				right = dp[j+1]
+			}
+			dp[j] = matrix[i][j] + min(left, mid, right)
+			left = mid
+			if i == 0 {
+				res = min(res, dp[j])
+			}
+		}
 	}
 
 	return res
