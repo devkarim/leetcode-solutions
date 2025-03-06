@@ -34,30 +34,20 @@ Solution Approach
 func wordBreak(s string, wordDict []string) bool {
 	n := len(s)
 
-	cache := make(map[int]bool)
-	cache[n] = true
+	dp := make([]bool, n+1)
+	dp[n] = true
 
-	var dfs func(start int) bool
-
-	dfs = func(start int) bool {
-		if val, found := cache[start]; found {
-			return val
-		}
-
-		for _, word := range wordDict {
-			end := start + len(word)
-			if end <= n && s[start:end] == word {
-				if dfs(end) {
-					cache[start] = true
-					return cache[start]
-				}
+	for start := n - 1; start >= 0; start-- {
+		for _, w := range wordDict {
+			end := start + len(w)
+			if end <= n && s[start:end] == w {
+				dp[start] = dp[end]
+			}
+			if dp[start] {
+				break
 			}
 		}
-
-		cache[start] = false
-
-		return cache[start]
 	}
 
-	return dfs(0)
+	return dp[0]
 }
