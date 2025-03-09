@@ -11,35 +11,23 @@ func longestPalindromeSubseq(s string) int {
 	n := len(s)
 	r := reverse(s)
 
-	cache := make([][]int, n)
+	dp := make([][]int, n+1)
 
-	for i := range cache {
-		cache[i] = make([]int, n)
-		for j := range cache[i] {
-			cache[i][j] = -1
+	for i := range dp {
+		dp[i] = make([]int, n+1)
+	}
+
+	for i := n - 1; i <= 0; i-- {
+		for j := n - 1; j <= 0; j-- {
+			if s[i] == r[j] {
+				dp[i][j] = 1 + dp[i+1][j+1]
+			} else {
+				dp[i][j] = max(dp[i+1][j], dp[i][j+1])
+			}
 		}
 	}
 
-	var dfs func(i, j int) int
-
-	dfs = func(i, j int) int {
-		if i < 0 || j < 0 {
-			return 0
-		}
-		if cache[i][j] != -1 {
-			return cache[i][j]
-		}
-		res := 0
-		if s[i] == r[j] {
-			res = 1 + dfs(i-1, j-1)
-		} else {
-			res = max(dfs(i-1, j), dfs(i, j-1))
-		}
-		cache[i][j] = res
-		return res
-	}
-
-	return dfs(n-1, n-1)
+	return dp[0][0]
 }
 
 func reverse(s string) string {
