@@ -11,32 +11,21 @@ func main() {
 func longestCommonSubsequence(text1 string, text2 string) int {
 	n := len(text1)
 	m := len(text2)
-	cache := make([][]int, n)
-	for i := range cache {
-		cache[i] = make([]int, m)
-		for j := range cache[i] {
-			cache[i][j] = -1
+
+	dp := make([][]int, n+1)
+	for i := range dp {
+		dp[i] = make([]int, m+1)
+	}
+
+	for i := n - 1; i >= 0; i-- {
+		for j := m - 1; j >= 0; j-- {
+			if text1[i] == text2[j] {
+				dp[i][j] = 1 + dp[i+1][j+1]
+			} else {
+				dp[i][j] = max(dp[i+1][j], dp[i][j+1])
+			}
 		}
 	}
 
-	var dfs func(i, j int) int
-
-	dfs = func(i, j int) int {
-		if i < 0 || j < 0 {
-			return 0
-		}
-		if cache[i][j] != -1 {
-			return cache[i][j]
-		}
-		res := 0
-		if text1[i] == text2[j] {
-			res = 1 + dfs(i-1, j-1)
-		} else {
-			res = max(dfs(i-1, j), dfs(i, j-1))
-		}
-		cache[i][j] = res
-		return res
-	}
-
-	return dfs(n-1, m-1)
+	return dp[0][0]
 }
