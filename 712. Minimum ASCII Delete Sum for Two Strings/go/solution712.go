@@ -12,12 +12,9 @@ func minimumDeleteSum(s1 string, s2 string) int {
 	m := len(s1)
 	n := len(s2)
 
-	cache := make([][]int, m)
-	for i := range cache {
-		cache[i] = make([]int, n)
-		for j := range cache[i] {
-			cache[i][j] = -1
-		}
+	dp := make([][]int, m+1)
+	for i := range dp {
+		dp[i] = make([]int, n+1)
 	}
 
 	countRemaining := func(s string, start int) int {
@@ -28,25 +25,23 @@ func minimumDeleteSum(s1 string, s2 string) int {
 		return cnt
 	}
 
-	var dfs func(i, j int) int
-
-	dfs = func(i, j int) int {
-		if i == m {
-			return countRemaining(s2, j)
-		}
-		if j == n {
-			return countRemaining(s1, i)
-		}
-		if cache[i][j] != -1 {
-			return cache[i][j]
-		}
-		if s1[i] == s2[j] {
-			cache[i][j] = dfs(i+1, j+1)
-		} else {
-			cache[i][j] = min(int(s1[i])+dfs(i+1, j), int(s2[j])+dfs(i, j+1))
-		}
-		return cache[i][j]
+	for i := 0; i < m; i++ {
+		dp[i][n] = countRemaining(s1, i)
 	}
 
-	return dfs(0, 0)
+	for j := 0; j < n; j++ {
+		dp[m][j] = countRemaining(s2, j)
+	}
+
+	for i := m - 1; i >= 0; i-- {
+		for j := n - 1; j >= 0; j-- {
+			if s1[i] == s2[j] {
+				dp[i][j] = dp[i+1][j+1]
+			} else {
+				dp[i][j] = min(int(s1[i])+dp[i+1][j], int(s2[j])+dp[i][j+1])
+			}
+		}
+	}
+
+	return dp[0][0]
 }
