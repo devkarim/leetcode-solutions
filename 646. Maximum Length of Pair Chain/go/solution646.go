@@ -17,12 +17,9 @@ func main() {
 func findLongestChain(pairs [][]int) int {
 	n := len(pairs)
 
-	cache := make([][]int, n)
-	for i := range cache {
-		cache[i] = make([]int, n)
-		for j := range cache[i] {
-			cache[i][j] = -1
-		}
+	dp := make([]int, n)
+	for i := range dp {
+		dp[i] = 1
 	}
 
 	// sort based on first element of the pairs
@@ -30,24 +27,17 @@ func findLongestChain(pairs [][]int) int {
 		return pairs[i][0] < pairs[j][0]
 	})
 
-	var dfs func(curr, last int) int
+	res := 1
 
-	dfs = func(curr, last int) int {
-		if curr == n {
-			return 0
+	for start := n - 1; start >= 0; start-- {
+		for end := start + 1; end < n; end++ {
+			if pairs[end][0] <= pairs[start][1] {
+				continue
+			}
+			dp[start] = max(dp[start], 1+dp[end])
+			res = max(res, dp[start])
 		}
-		if cache[curr][last+1] != -1 {
-			return cache[curr][last+1]
-		}
-		// exclude curr element
-		res := dfs(curr+1, last)
-		if last == -1 || pairs[curr][0] > pairs[last][1] {
-			// include curr element
-			res = max(res, 1+dfs(curr+1, curr))
-		}
-		cache[curr][last+1] = res
-		return res
 	}
 
-	return dfs(0, -1)
+	return res
 }
