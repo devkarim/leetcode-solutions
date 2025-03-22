@@ -12,30 +12,20 @@ func maxUncrossedLines(nums1 []int, nums2 []int) int {
 	m := len(nums1)
 	n := len(nums2)
 
-	cache := make([][]int, m)
-	for i := range cache {
-		cache[i] = make([]int, n)
-		for j := range cache[i] {
-			cache[i][j] = -1
+	dp := make([][]int, m+1)
+	for i := range dp {
+		dp[i] = make([]int, n+1)
+	}
+
+	for i := m - 1; i >= 0; i-- {
+		for j := n - 1; j >= 0; j-- {
+			if nums1[i] == nums2[j] {
+				dp[i][j] = dp[i+1][j+1] + 1
+			} else {
+				dp[i][j] = max(dp[i+1][j], dp[i][j+1])
+			}
 		}
 	}
 
-	var dfs func(i, j int) int
-	
-	dfs = func(i, j int) int {
-		if i == m || j == n {
-			return 0
-		}
-		if cache[i][j] != -1 {
-			return cache[i][j]
-		}
-		if nums1[i] == nums2[j] {
-			cache[i][j] = dfs(i+1, j+1)+1
-		} else {
-			cache[i][j] = max(dfs(i+1, j), dfs(i, j+1))
-		}
-		return cache[i][j]
-	}
-
-	return dfs(0, 0)
+	return dp[0][0]
 }
