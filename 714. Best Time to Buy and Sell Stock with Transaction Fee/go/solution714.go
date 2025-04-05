@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math"
 )
 
 func main() {
@@ -17,21 +16,8 @@ func maxProfit(prices []int, fee int) int {
 	next := make([]int, 2)
 
 	for i := n - 1; i >= 0; i-- {
-		for isBuying := 1; isBuying >= 0; isBuying-- {
-			res := math.MinInt
-			if isBuying == 1 {
-				// buy
-				res = -prices[i] + next[0]
-			} else {
-				// sell
-				res = -fee + prices[i] + next[1]
-			}
-
-			// cooldown
-			res = max(res, next[isBuying])
-
-			curr[isBuying] = res
-		}
+		curr[1] = max(curr[1], next[1], -prices[i]+next[0])
+		curr[0] = max(curr[0], next[0], -fee+prices[i]+next[1])
 		next = curr
 	}
 
