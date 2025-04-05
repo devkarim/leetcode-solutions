@@ -12,14 +12,13 @@ func main() {
 
 func maxProfit(prices []int, fee int) int {
 	n := len(prices)
-	curr := make([]int, 2)
-	next := make([]int, 2)
+	n0 := 0
+	n1 := 0
 
 	for i := n - 1; i >= 0; i-- {
-		curr[1] = max(curr[1], next[1], -prices[i]+next[0])
-		curr[0] = max(curr[0], next[0], -fee+prices[i]+next[1])
-		next = curr
+		n1 = max(n1, -prices[i]+n0)
+		n0 = max(n0, -fee+prices[i]+n1)
 	}
 
-	return next[1]
+	return n1
 }
