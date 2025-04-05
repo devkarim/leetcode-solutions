@@ -13,33 +13,27 @@ func main() {
 
 func maxProfit(prices []int, fee int) int {
 	n := len(prices)
-	dp := make([][]int, n+1)
-
-	for i := range dp {
-		dp[i] = make([]int, 2)
-	}
-
-	dfs := func(i int, isBuying int) int {
-		res := math.MinInt
-		if isBuying == 1 {
-			// buy
-			res = -prices[i] + dp[i+1][0]
-		} else {
-			// sell
-			res = -fee + prices[i] + dp[i+1][1]
-		}
-
-		// cooldown
-		res = max(res, dp[i+1][isBuying])
-
-		return res
-	}
+	curr := make([]int, 2)
+	next := make([]int, 2)
 
 	for i := n - 1; i >= 0; i-- {
 		for isBuying := 1; isBuying >= 0; isBuying-- {
-			dp[i][isBuying] = dfs(i, isBuying)
+			res := math.MinInt
+			if isBuying == 1 {
+				// buy
+				res = -prices[i] + next[0]
+			} else {
+				// sell
+				res = -fee + prices[i] + next[1]
+			}
+
+			// cooldown
+			res = max(res, next[isBuying])
+
+			curr[isBuying] = res
 		}
+		next = curr
 	}
 
-	return dp[0][1]
+	return next[1]
 }
