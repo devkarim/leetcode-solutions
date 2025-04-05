@@ -13,48 +13,33 @@ func main() {
 
 func maxProfit(prices []int, fee int) int {
 	n := len(prices)
-	cache := make([][]int, n)
+	dp := make([][]int, n+1)
 
-	for i := range cache {
-		cache[i] = make([]int, 2)
-		for j := range cache[i] {
-			cache[i][j] = -1
-		}
+	for i := range dp {
+		dp[i] = make([]int, 2)
 	}
 
-	var dfs func(i int, isBuying bool) int
-
-	dfs = func(i int, isBuying bool) int {
-		if i >= n {
-			return 0
-		}
-		if cache[i][bool2int(isBuying)] != -1 {
-			return cache[i][bool2int(isBuying)]
-		}
-
+	dfs := func(i int, isBuying int) int {
 		res := math.MinInt
-		if isBuying {
+		if isBuying == 1 {
 			// buy
-			res = -prices[i] + dfs(i+1, false)
+			res = -prices[i] + dp[i+1][0]
 		} else {
 			// sell
-			res = -fee + prices[i] + dfs(i+1, true)
+			res = -fee + prices[i] + dp[i+1][1]
 		}
 
 		// cooldown
-		res = max(res, dfs(i+1, isBuying))
+		res = max(res, dp[i+1][isBuying])
 
-		cache[i][bool2int(isBuying)] = res
-
-		return cache[i][bool2int(isBuying)]
+		return res
 	}
 
-	return dfs(0, true)
-}
-
-func bool2int(b bool) int {
-	if b {
-		return 1
+	for i := n - 1; i >= 0; i-- {
+		for isBuying := 1; isBuying >= 0; isBuying-- {
+			dp[i][isBuying] = dfs(i, isBuying)
+		}
 	}
-	return 0
+
+	return dp[0][1]
 }
