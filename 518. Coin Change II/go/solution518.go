@@ -10,32 +10,32 @@ func main() {
 
 func change(amount int, coins []int) int {
 	n := len(coins)
-	cache := make([][]int, n)
+	dp := make([][]int, n+1)
 
-	for i := range cache {
-		cache[i] = make([]int, amount+1)
-		for j := range cache[i] {
-			cache[i][j] = -1
-		}
+	for i := range dp {
+		dp[i] = make([]int, amount+1)
 	}
 
-	var dfs func(i, total int) int
-
-	dfs = func(i, total int) int {
-		if total == 0 {
-			return 1
-		}
-		if i >= n || total < 0 {
+	dfs := func(i, total int) int {
+		if i == n {
+			if total == 0 {
+				return 1
+			}
 			return 0
 		}
-		if cache[i][total] != -1 {
-			return cache[i][total]
+		take := 0
+		if total >= coins[i] {
+			take = dp[i][total-coins[i]]
 		}
-		take := dfs(i, total-coins[i])
-		skip := dfs(i+1, total)
-		cache[i][total] = take + skip
-		return cache[i][total]
+		skip := dp[i+1][total]
+		return skip + take
 	}
 
-	return dfs(0, amount)
+	for total := 0; total <= amount; total++ {
+		for i := n; i >= 0; i-- {
+			dp[i][total] = dfs(i, total)
+		}
+	}
+
+	return dp[0][amount]
 }
