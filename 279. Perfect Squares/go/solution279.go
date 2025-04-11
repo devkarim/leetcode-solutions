@@ -11,13 +11,11 @@ func main() {
 }
 
 func numSquares(n int) int {
+	m := int(math.Sqrt(float64(n)))
 	cache := make([][]int, n+1)
 
 	for i := range cache {
-		cache[i] = make([]int, int(math.Sqrt(float64(n)))+1)
-		for j := range cache[i] {
-			cache[i][j] = -1
-		}
+		cache[i] = make([]int, m+1)
 	}
 
 	var dfs func(k, i int) int
@@ -29,7 +27,7 @@ func numSquares(n int) int {
 			}
 			return n
 		}
-		if cache[k][i] != -1 {
+		if cache[k][i] != 0 {
 			return cache[k][i]
 		}
 		// take
