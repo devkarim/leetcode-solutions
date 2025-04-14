@@ -12,31 +12,22 @@ func main() {
 
 func numSquares(n int) int {
 	m := int(math.Sqrt(float64(n)))
-	cache := make([][]int, n+1)
+	dp := make([]int, n+1)
 
-	for i := range cache {
-		cache[i] = make([]int, m+1)
+	for i := range dp {
+		dp[i] = n
 	}
+	dp[0] = 0
 
-	var dfs func(k, i int) int
-
-	dfs = func(k, i int) int {
-		if i > int(math.Sqrt(float64(k))) {
-			if k == 0 {
-				return 0
+	for target := 1; target <= n; target++ {
+		for s := 1; s <= m; s++ {
+			square := s * s
+			if target < square {
+				break
 			}
-			return n
+			dp[target] = min(dp[target], 1+dp[target-square])
 		}
-		if cache[k][i] != 0 {
-			return cache[k][i]
-		}
-		// take
-		take := 1 + dfs(k-i*i, i)
-		// skip
-		skip := dfs(k, i+1)
-		cache[k][i] = min(take, skip)
-		return cache[k][i]
 	}
 
-	return dfs(n, 1)
+	return dp[n]
 }
