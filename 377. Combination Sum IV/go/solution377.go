@@ -10,29 +10,15 @@ func main() {
 
 func combinationSum4(nums []int, target int) int {
 	dp := make([]int, target+1)
-	for i := range dp {
-		dp[i] = -1
-	}
+	dp[0] = 1
 
-	var dfs func(t int) int
-
-	dfs = func(t int) int {
-		if t == 0 {
-			return 1
-		}
-		if t < 0 {
-			return 0
-		}
-		if dp[t] != -1 {
-			return dp[t]
-		}
-		res := 0
+	for t := 1; t <= target; t++ {
 		for _, n := range nums {
-			res += dfs(t - n)
+			if t >= n {
+				dp[t] += dp[t-n]
+			}
 		}
-		dp[t] = res
-		return dp[t]
 	}
 
-	return dfs(target)
+	return dp[target]
 }
