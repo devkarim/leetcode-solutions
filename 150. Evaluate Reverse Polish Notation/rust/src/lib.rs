@@ -13,15 +13,16 @@ impl Solution {
                         "+" => a + b,
                         "-" => a - b,
                         "/" => a / b,
-                        _ => a * b,
+                        "*" => a * b,
+                        _ => unreachable!(),
                     }
                 }
 
-                _ => token.parse().expect("Cannot parse"),
+                _ => token.parse().unwrap(),
             };
             stack.push(res);
         }
-        stack.pop().expect("Array is empty")
+        stack.pop().unwrap()
     }
 }
 
