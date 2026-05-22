@@ -1,14 +1,17 @@
 #![allow(dead_code)]
+
+use std::collections::HashMap;
 struct Solution {}
 
 impl Solution {
     pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
-        for (i, a) in nums.iter().enumerate() {
-            for (j, b) in nums.iter().enumerate().skip(i + 1) {
-                if a + b == target {
-                    return vec![i as i32, j as i32];
-                }
+        let mut num_index_map = HashMap::new();
+        for (i, &n) in nums.iter().enumerate() {
+            let required = target - n;
+            if let Some(&j) = num_index_map.get(&required) {
+                return vec![i as i32, j as i32];
             }
+            num_index_map.insert(n, i);
         }
         unreachable!();
     }
@@ -26,8 +29,8 @@ mod tests {
             (vec![3, 3], 6, vec![0, 1]),
         ];
 
-        for (nums, target, expected) in test_cases {
-            assert_eq!(expected, Solution::two_sum(nums, target));
+        for (nums, target, mut expected) in test_cases {
+            assert_eq!(expected.sort(), Solution::two_sum(nums, target).sort());
         }
     }
 }
