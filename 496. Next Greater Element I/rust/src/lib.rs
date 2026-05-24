@@ -6,11 +6,10 @@ struct Solution {}
 
 impl Solution {
     pub fn next_greater_element(nums1: Vec<i32>, nums2: Vec<i32>) -> Vec<i32> {
-        let mut res = Vec::with_capacity(nums1.len());
-        let mut num_greater_map = HashMap::new();
+        let mut num_greater_map = HashMap::with_capacity(nums2.len());
         let mut monotonic_stack: Vec<i32> = Vec::with_capacity(nums2.len());
 
-        for &n in nums2.iter() {
+        for n in nums2 {
             while let Some(&top) = monotonic_stack.last()
                 && top < n
             {
@@ -20,11 +19,10 @@ impl Solution {
             monotonic_stack.push(n);
         }
 
-        for n in nums1 {
-            res.push(num_greater_map.get(&n).copied().unwrap_or(-1));
-        }
-
-        res
+        nums1
+            .into_iter()
+            .map(|n| num_greater_map.get(&n).copied().unwrap_or(-1))
+            .collect()
     }
 }
 
