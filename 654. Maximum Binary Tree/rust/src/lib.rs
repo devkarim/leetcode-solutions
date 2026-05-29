@@ -24,27 +24,25 @@ use std::cell::RefCell;
 use std::rc::Rc;
 impl Solution {
     pub fn construct_maximum_binary_tree(nums: Vec<i32>) -> Option<Rc<RefCell<TreeNode>>> {
-        return Self::build_tree(&nums, 0, nums.len() as i32);
-    }
+        let mut st: Vec<Rc<RefCell<TreeNode>>> = Vec::new();
+        for num in nums {
+            let mut left = None;
+            while let Some(last) = st.last()
+                && last.borrow().val < num
+            {
+                left = st.pop();
+            }
 
-    pub fn build_tree(nums: &Vec<i32>, start: i32, end: i32) -> Option<Rc<RefCell<TreeNode>>> {
-        let max_item = nums
-            .iter()
-            .skip(start as usize)
-            .take((end - start) as usize)
-            .enumerate()
-            .max_by_key(|&(_index, &value)| value);
-        let (idx, &max_val) = max_item.unwrap();
-        let idx = idx as i32 + start as i32;
+            let tree = Rc::new(RefCell::new(TreeNode::new(num)));
+            tree.borrow_mut().left = left;
 
-        let mut tree = TreeNode::new(max_val);
-        if start < idx {
-            tree.left = Self::build_tree(&nums, start, idx);
+            if let Some(last) = st.last() {
+                last.borrow_mut().right = Some(Rc::clone(&tree));
+            }
+
+            st.push(tree);
         }
-        if idx + 1 < end {
-            tree.right = Self::build_tree(&nums, idx + 1, end);
-        }
-        return Some(Rc::new(RefCell::new(tree)));
+        Some(st.remove(0))
     }
 }
 
