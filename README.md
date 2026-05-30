@@ -8,7 +8,7 @@ My LeetCode profile is [here](https://leetcode.com/u/devkarim/).
 
 ## Technologies Used
 
-- **Programming Language:** Java / Go / Rust
+- **Programming Language:** Java / Go / Rust / Python
 
 ## Author
 
