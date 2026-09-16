@@ -21,7 +21,7 @@ class Solution:
             days_needed = 1
             currDay = 0
             for w in weights:
-                if currDay + w < min_w:
+                if currDay + w <= min_w:
                     currDay += w
                 else:
                     days_needed += 1
@@ -32,7 +32,7 @@ class Solution:
             else:
                 left = min_w + 1
 
-        return max(right, maxWeights)
+        return left
 
 
 @pytest.fixture
