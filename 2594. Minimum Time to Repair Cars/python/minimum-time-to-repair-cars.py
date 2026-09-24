@@ -26,6 +26,7 @@ class Solution:
                 left = mid + 1
         return left
 
+
 @pytest.fixture
 def sol():
     return Solution()
