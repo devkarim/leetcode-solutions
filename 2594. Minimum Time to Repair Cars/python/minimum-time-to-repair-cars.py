@@ -1,22 +1,30 @@
 import pytest
 
+from collections import Counter
+from math import sqrt
+
 
 class Solution:
     def repairCars(self, ranks: list[int], cars: int) -> int:
+        freq = Counter(ranks)
         left = 1
         right = min(ranks) * cars ** 2
 
+        def canRepairAllCars(t: int):
+            total_cars_needed = 0
+            for r, f in freq.items():
+                total_cars_needed += f*(sqrt(t/r)//1)
+                if total_cars_needed >= cars:
+                    return True
+            return False
+
         while left <= right:
             mid = (left + right) // 2
-            total_cars_needed = 0
-            for r in ranks:
-                total_cars_needed += int((mid/r) ** 0.5)
-            if total_cars_needed >= cars:
+            if canRepairAllCars(mid):
                 right = mid - 1
             else:
                 left = mid + 1
         return left
-
 
 @pytest.fixture
 def sol():
