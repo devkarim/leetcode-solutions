@@ -1,7 +1,7 @@
 import pytest
 
 from collections import Counter
-from math import sqrt
+from math import isqrt
 
 
 class Solution:
@@ -13,7 +13,7 @@ class Solution:
         def canRepairAllCars(t: int):
             total_cars_needed = 0
             for r, f in freq.items():
-                total_cars_needed += f*(sqrt(t/r)//1)
+                total_cars_needed += f*(isqrt(t//r))
                 if total_cars_needed >= cars:
                     return True
             return False
