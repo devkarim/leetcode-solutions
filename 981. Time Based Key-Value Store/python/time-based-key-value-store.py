@@ -4,7 +4,6 @@ import pytest
 
 
 class TimeMap:
-
     def __init__(self):
         self.store = defaultdict(list)
 
@@ -12,35 +11,28 @@ class TimeMap:
         self.store[key].append((timestamp, value))
 
     def get(self, key: str, timestamp: int) -> str:
-        if key not in self.store:
-            return ""
-
-        arr = self.store[key]
-        l = 0
-        r = len(arr) - 1
+        res = ""
+        values = self.store.get(key, [])
+        l, r = 0, len(values) - 1
         while l <= r:
             m = (l + r) // 2
-            curr_timestamp = arr[m][0]
+            curr_timestamp = values[m][0]
             if curr_timestamp == timestamp:
-                return arr[m][1]
+                return values[m][1]
             if curr_timestamp < timestamp:
+                res = values[m][1]
                 l = m + 1
             else:
                 r = m - 1
 
-        if l >= len(arr):
-            return arr[-1][1]
-
-        if r < 0:
-            return ""
-
-        return arr[r][1]
+        return res
 
 
 # Your TimeMap object will be instantiated and called as such:
 # obj = TimeMap()
 # obj.set(key,value,timestamp)
 # param_2 = obj.get(key,timestamp)
+
 
 @pytest.fixture
 def sol():
