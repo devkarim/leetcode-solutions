@@ -3,26 +3,20 @@ import pytest
 
 class Solution:
     def countFairPairs(self, nums: List[int], lower: int, upper: int) -> int:
-        def lower_bound(n, l, r):
+        def count_pairs_below(val):
+            l, r, res = 0, len(nums) - 1, 0
             while l <= r:
-                m = (l + r) // 2
-                if nums[m] >= n:
-                    r = m - 1
+                total = nums[l] + nums[r]
+                if total < val:
+                    res += r - l
+                    l += 1
                 else:
-                    l = m + 1
-            return l
+                    r -= 1
+
+            return res
 
         nums.sort()
-        res = 0
-
-        for idx, n in enumerate(nums):
-            l = lower_bound(lower - n, idx+1, len(nums) - 1)
-            r = lower_bound(upper - n + 1, idx+1, len(nums) - 1)
-
-            res += r - l
-
-        return res
-
+        return count_pairs_below(upper + 1) - count_pairs_below(lower)
 
 @pytest.fixture
 def sol():
