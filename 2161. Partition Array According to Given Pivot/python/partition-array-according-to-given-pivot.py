@@ -3,20 +3,32 @@ import pytest
 
 class Solution:
     def pivotArray(self, nums: list[int], pivot: int) -> list[int]:
-        leftSide = []
-        midSide = []
-        rightSide = []
+        lessNum = 0
+        equalNum = 0
 
         for n in nums:
             if n < pivot:
-                leftSide.append(n)
+                lessNum += 1
+            elif n == pivot:
+                equalNum += 1
+
+        ans = [0] * len(nums)
+        lessIdx = 0
+        equalIdx = lessNum
+        greaterIdx = lessNum + equalNum
+
+        for n in nums:
+            if n < pivot:
+                ans[lessIdx] = n
+                lessIdx += 1
             elif n > pivot:
-                rightSide.append(n)
+                ans[greaterIdx] = n
+                greaterIdx += 1
             else:
-                midSide.append(n)
+                ans[equalIdx] = n
+                equalIdx += 1
 
-        return leftSide + midSide + rightSide
-
+        return ans
 
 @pytest.fixture
 def sol():
