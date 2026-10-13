@@ -3,33 +3,28 @@ import pytest
 
 class Solution:
     def pivotArray(self, nums: list[int], pivot: int) -> list[int]:
-        lessNum = 0
-        equalNum = 0
-
-        for n in nums:
-            if n < pivot:
-                lessNum += 1
-            elif n == pivot:
-                equalNum += 1
-
         ans = [0] * len(nums)
-        lessIdx = 0
-        equalIdx = lessNum
-        greaterIdx = lessNum + equalNum
+        less_idx = 0
+        greater_idx = len(nums) - 1
 
-        for n in nums:
-            if n < pivot:
-                ans[lessIdx] = n
-                lessIdx += 1
-            elif n > pivot:
-                ans[greaterIdx] = n
-                greaterIdx += 1
-            else:
-                ans[equalIdx] = n
-                equalIdx += 1
+        i = 0
+        j = len(nums) - 1
+
+        while i < len(nums):
+            if nums[i] < pivot:
+                ans[less_idx] = nums[i]
+                less_idx += 1
+            if nums[j] > pivot:
+                ans[greater_idx] = nums[j]
+                greater_idx -= 1
+            i += 1
+            j -= 1
+
+        while greater_idx >= less_idx:
+            ans[less_idx] = pivot
+            less_idx += 1
 
         return ans
-
 @pytest.fixture
 def sol():
     return Solution()
