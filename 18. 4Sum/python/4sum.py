@@ -4,37 +4,35 @@ import pytest
 class Solution:
     def fourSum(self, nums: list[int], target: int) -> list[list[int]]:
         nums = sorted(nums)
-        res = []
+        res, tuples = [], []
 
-        a = 0
-        while a < len(nums) - 3:
-            if a > 0 and nums[a] == nums[a - 1]:
-                a += 1
-                continue
-            b = a + 1
-            while b < len(nums) - 2:
-                c = b + 1
-                d = len(nums) - 1
-                while c < d:
-                    total = nums[a] + nums[b] + nums[c] + nums[d]
-                    if total == target:
-                        res.append([nums[a], nums[b], nums[c], nums[d]])
-                        c += 1
-                        d -= 1
-                        while c < d and nums[c] == nums[c - 1]:
-                            c += 1
-                    elif total < target:
-                        c += 1
+        def kSum(k, start, t):
+            # base case
+            if k == 2:
+                l, r = start, len(nums) - 1
+                while l < r:
+                    total = nums[l] + nums[r]
+                    if total == t:
+                        res.append(tuples + [nums[l], nums[r]])
+                        l += 1
+                        r -= 1
+                        while l < r and nums[l] == nums[l - 1]:
+                            l += 1
+                    elif total < t:
+                        l += 1
                     else:
-                        d -= 1
-                b += 1
-                while b < len(nums) and nums[b] == nums[b - 1]:
-                    b += 1
+                        r -= 1
+                return
+            for i in range(start, len(nums) - k + 1):
+                if i > start and nums[i] == nums[i - 1]:
+                    continue
+                tuples.append(nums[i])
+                kSum(k - 1, i + 1, t - nums[i])
+                tuples.pop()
 
-            a += 1
+        kSum(4, 0, target)
 
         return res
-
 
 @pytest.fixture
 def sol():
