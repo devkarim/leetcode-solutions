@@ -6,16 +6,10 @@ class Solution:
         """
         Do not return anything, modify nums in-place instead.
         """
+        k = k % len(nums)
         if k == 0:
             return
-        i = 0
-        j = k % len(nums)
-        nums_orig = nums[:]
-        while i < len(nums):
-            nums[j] = nums_orig[i]
-            j = (j + 1) % len(nums)
-            i += 1
-
+        nums[:k], nums[k:] = nums[-k:], nums[:-k]
 
 @pytest.fixture
 def sol():
