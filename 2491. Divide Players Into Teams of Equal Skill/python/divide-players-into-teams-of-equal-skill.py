@@ -5,25 +5,23 @@ from collections import Counter
 
 class Solution:
     def dividePlayers(self, skill: list[int]) -> int:
-        target = (2 * sum(skill)) / len(skill)
-        # if required skill has decimals, ints cannot add up and contain decimals
-        if target % 1 != 0:
+        if (2 * sum(skill)) % len(skill) != 0:
             return -1
-        target = int(target)
 
-        skill_map = Counter(skill)
-
+        target = (2 * sum(skill)) // len(skill)
+        count = Counter(skill)
         chemistry_sum = 0
+
         for n in skill:
-            if skill_map[n] == 0:
+            if count[n] == 0:
                 continue
+
+            count[n] -= 1
             diff = target - n
-            if not skill_map[diff]:
+            if not count[diff]:
                 return -1
 
-            skill_map[n] -= 1
-            skill_map[diff] -= 1
-
+            count[diff] -= 1
             chemistry_sum += (n * diff)
 
         return chemistry_sum
