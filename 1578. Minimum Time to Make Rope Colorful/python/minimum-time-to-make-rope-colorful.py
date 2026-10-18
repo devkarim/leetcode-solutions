@@ -7,12 +7,11 @@ class Solution:
         left, cost = 0, 0
         while left < n:
             right = left + 1
-            if right < n and colors[left] == colors[right]:
-                while right < n and colors[left] == colors[right]:
-                    cost += min(neededTime[left], neededTime[right])
-                    if neededTime[left] < neededTime[right]:
-                        break
-                    right += 1
+            while right < n and colors[left] == colors[right]:
+                cost += min(neededTime[left], neededTime[right])
+                if neededTime[left] < neededTime[right]:
+                    break
+                right += 1
             left = right
         return cost
 
