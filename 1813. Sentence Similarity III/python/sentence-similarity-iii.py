@@ -20,10 +20,7 @@ class Solution:
             common_suffix += 1
             i -= 1
 
-        if common_suffix + common_prefix >= m:
-            return True
-
-        return False
+        return common_suffix + common_prefix >= m
 
 
 @pytest.fixture
