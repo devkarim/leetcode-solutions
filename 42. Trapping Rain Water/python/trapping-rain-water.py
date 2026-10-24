@@ -3,25 +3,19 @@ import pytest
 
 class Solution:
     def trap(self, height: list[int]) -> int:
-        n = len(height)
-        max_left = [0] * n
-        max_right = [0] * n
-
-        max_left[0] = 0
-        for i in range(1, n):
-            max_left[i] = max(max_left[i - 1], height[i - 1])
-
-        max_right[-1] = 0
-        for i in range(n - 2, -1, -1):
-            max_right[i] = max(max_right[i + 1], height[i + 1])
+        l, r = 0, len(height) - 1
+        left_max, right_max = height[l], height[r]
 
         res = 0
-
-        for i, h in enumerate(height):
-            water_blocks = min(max_right[i], max_left[i]) - h
-            if water_blocks > 0:
-                res += water_blocks
-
+        while l < r:
+            if left_max < right_max:
+                l += 1
+                left_max = max(height[l], left_max)
+                res += left_max - height[l]
+            else:
+                r -= 1
+                right_max = max(height[r], right_max)
+                res += right_max - height[r]
         return res
 
 
