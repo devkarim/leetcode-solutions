@@ -3,35 +3,31 @@ import pytest
 
 class Solution:
     def asteroidCollision(self, asteroids: list[int]) -> list[int]:
-        st = []
-        res = []
+        stack = []
         for ast in asteroids:
-            res.append(ast)
-            if ast > 0:
-                st.append(ast)
-            else:
-                while st:
-                    last_pos = st.pop()
-                    if last_pos == abs(ast):
-                        res.pop()
-                        res.pop()
-                        break
-                    elif last_pos > abs(ast):
-                        st.append(last_pos)
-                        res.pop()
-                        break
-                    else:
-                        res.pop()
-                        res.pop()
-                        res.append(ast)
-        return res
+            while stack and ast < 0 and stack[-1] > 0:
+                if abs(ast) > stack[-1]:
+                    stack.pop()
+                elif abs(ast) < stack[-1]:
+                    ast = 0
+                else:
+                    ast = 0
+                    stack.pop()
+            if ast:
+                stack.append(ast)
+        return stack
+
 
 @pytest.fixture
 def sol():
     return Solution()
 
-@pytest.mark.parametrize("args, expected", [
-    (([5,7,4,-6,10,-11],), [-11]),
-])
+
+@pytest.mark.parametrize(
+    "args, expected",
+    [
+        (([5, 7, 4, -6, 10, -11],), [-11]),
+    ],
+)
 def test_solution(sol, args, expected):
     assert sol.asteroidCollision(*args) == expected
