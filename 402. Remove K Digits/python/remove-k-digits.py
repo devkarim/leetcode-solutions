@@ -5,18 +5,17 @@ class Solution:
     def removeKdigits(self, num: str, k: int) -> str:
         stack = []
         for n in num:
-            while k != 0 and stack and int(stack[-1]) > int(n):
+            while k != 0 and stack and stack[-1] > n:
                 stack.pop()
                 k -= 1
+            # if no leading zeros
             if n != "0" or stack:
                 stack.append(n)
+        # if k is still not zero, pop from last digits
         while stack and k > 0:
             stack.pop()
             k -= 1
-        if not stack:
-            return "0"
-        return "".join(stack)
-
+        return "".join(stack) if stack else "0"
 
 @pytest.fixture
 def sol():
