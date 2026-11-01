@@ -3,19 +3,16 @@ import pytest
 
 class Solution:
     def removeDuplicates(self, s: str, k: int) -> str:
-        stack = [] # (char, cnt)
+        stack = [] # [char, cnt]
         for c in s:
-            cnt = ((stack and stack[-1][0] == c and stack[-1][1]) or 0) + 1
-            if cnt == k:
-                stack.pop()
-                cnt = 0
-            if cnt != 0:
-                if cnt == 1:
-                    stack.append((c, cnt))
-                else:
-                    stack[-1] = (c, cnt)
-        return "".join(pair[0] * pair[1] for pair in stack)
+            if stack and stack[-1][0] == c:
+                stack[-1][1] += 1
+            else:
+                stack.append([c, 1])
 
+            if stack[-1][1] == k:
+                stack.pop()
+        return "".join(pair[0] * pair[1] for pair in stack)
 
 @pytest.fixture
 def sol():
