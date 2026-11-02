@@ -8,15 +8,14 @@ class Solution:
             if c != ")":
                 stack.append(c)
             else:
-                reversed_str = ""
+                reversed_str = []
                 while stack and stack[-1] != "(":
-                    reversed_str = reversed_str + stack.pop()
+                    reversed_str.append(stack.pop())
                 # remove last "("
                 stack.pop()
                 # add reversed_str to stack
-                stack += reversed_str
+                stack.extend(reversed_str)
         return "".join(stack)
-
 
 @pytest.fixture
 def sol():
