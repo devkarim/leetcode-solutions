@@ -4,25 +4,21 @@ from collections import Counter
 
 class FreqStack:
     def __init__(self):
-        self.stack = []
+        self.max_freq = 0
         self.freq = Counter()
         self.freq_numbers = {}
 
     def push(self, val: int) -> None:
-        if not self.stack:
-            self.stack.append(1)
         self.freq[val] += 1
         if self.freq[val] not in self.freq_numbers:
             self.freq_numbers[self.freq[val]] = []
         self.freq_numbers[self.freq[val]].append(val)
-        if self.stack[-1] < self.freq[val]:
-            self.stack.append(self.freq[val])
+        self.max_freq = max(self.max_freq, self.freq[val])
 
     def pop(self) -> int:
-        print(self.stack)
-        grp = self.freq_numbers[self.stack[-1]]
+        grp = self.freq_numbers[self.max_freq]
         if len(grp) == 1:
-            self.stack.pop()
+            self.max_freq -= 1
         last_item = grp.pop()
         self.freq[last_item] -= 1
         return last_item
