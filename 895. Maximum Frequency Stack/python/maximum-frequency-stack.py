@@ -6,22 +6,22 @@ class FreqStack:
     def __init__(self):
         self.max_freq = 0
         self.freq = Counter()
-        self.freq_numbers = {}
+        self.stacks = {}
 
     def push(self, val: int) -> None:
         self.freq[val] += 1
-        if self.freq[val] not in self.freq_numbers:
-            self.freq_numbers[self.freq[val]] = []
-        self.freq_numbers[self.freq[val]].append(val)
+        if self.freq[val] not in self.stacks:
+            self.stacks[self.freq[val]] = []
+        self.stacks[self.freq[val]].append(val)
         self.max_freq = max(self.max_freq, self.freq[val])
 
     def pop(self) -> int:
-        grp = self.freq_numbers[self.max_freq]
-        if len(grp) == 1:
+        res = self.stacks[self.max_freq].pop()
+        if not self.stacks[self.max_freq]:
             self.max_freq -= 1
-        last_item = grp.pop()
-        self.freq[last_item] -= 1
-        return last_item
+        self.freq[res] -= 1
+        return res
+
 
 # Your FreqStack object will be instantiated and called as such:
 # obj = FreqStack()
